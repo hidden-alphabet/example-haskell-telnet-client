@@ -4,22 +4,17 @@ import System.Environment
 import Control.Monad
 import System.IO
 
-type Lock = MVar ()
 type TelnetSession a = IO a
 
-sender :: Handle -> Lock -> IO ()
-sender handle lock = forever $ do
+sender :: Handle -> IO ()
+sender handle = forever $ do
   request <- getLine
   hPutStrLn handle $ request ++ "\r\n"
 
-  yield
-
-receiver :: Handle -> Lock -> IO ()
-receiver handle lock = forever $ do
+receiver :: Handle -> IO ()
+receiver handle = forever $ do
   response <- hGetContents handle
   putStrLn response 
-
-  yield
 
 connect :: String -> String -> TelnetSession Socket
 connect host port = do
@@ -49,9 +44,9 @@ main = do
 
       putStrLn "Starting client..."
 
-      forkIO $ receiver handle lock
+      forkIO $ receiver handle
+      sender handle
 
-      sender handle lock
     _ -> do 
       putStrLn "usage: telnet host port"
     
