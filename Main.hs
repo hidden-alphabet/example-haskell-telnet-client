@@ -14,7 +14,7 @@ sender handle = forever $ do
 receiver :: Handle -> IO ()
 receiver handle = forever $ do
   response <- hGetContents handle
-  putStrLn response 
+  putStrLn response
 
 connect :: String -> String -> TelnetSession Socket
 connect host port = do
@@ -32,22 +32,18 @@ main :: TelnetSession ()
 main = do
   args <- getArgs
 
-  case args of 
-    [host, port] -> do 
+  case args of
+    [host, port] -> do
       putStrLn $ "Connecting to telnet://" ++ host ++ ":" ++ port ++ "..."
 
       sock <- Main.connect host port
       handle <- Socket.socketToHandle sock ReadWriteMode
       hSetBuffering handle LineBuffering
 
-      lock <- newEmptyMVar
-
-      putStrLn "Starting client..."
-
       forkIO $ receiver handle
       sender handle
 
-    _ -> do 
+    _ -> do
       putStrLn "usage: telnet host port"
-    
+   
   return ()
