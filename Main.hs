@@ -35,8 +35,8 @@ main = do
   case args of 
     [host, port] -> do 
       putStrLn $ "Connecting to telnet://" ++ host ++ ":" ++ port ++ "..."
-      sock <- Main.connect host port 
 
+      sock <- Main.connect host port
       handle <- Socket.socketToHandle sock ReadWriteMode
       hSetBuffering handle LineBuffering
 
