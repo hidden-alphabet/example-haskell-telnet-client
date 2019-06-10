@@ -1,5 +1,4 @@
 import Network.Socket as Socket
-import Control.Monad.Except
 import Control.Concurrent
 import System.Environment
 import Control.Monad
