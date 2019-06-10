@@ -11,7 +11,7 @@ type TelnetSession a = IO a
 sender :: Handle -> Lock -> IO ()
 sender handle lock = forever $ do
   request <- getLine
-  hPutStrLn handle request
+  hPutStrLn handle $ request ++ "\r\n"
 
   yield
 
